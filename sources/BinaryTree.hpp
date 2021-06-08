@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <stack>
+#include <vector>
 
 namespace ariel{
     template<typename T>
@@ -341,13 +342,93 @@ namespace ariel{
             {
                 return postorder_iterator();
             }
-            std::ostream& str(std::ostream& os)
+
+            static int get_depth(Node* n)
             {
+                if(n == nullptr){return 0;}
+                return 1 + max(get_depth(n->left), get_depth(n->right));
+            }
+
+            std::ostream& assist(std::ostream& os, std::vector<Node*> a, int d) const
+            {
+                if(d == 0){return os;}
+                os<< '\n';
+                for(unsigned long i = 0; i < a.size(); i+=2)
+                {
+                    if(a.at(i)!=nullptr){os << '|';}
+                    else if(a.at(i+1)!=nullptr){os <<'*';}
+                    else {os << ' ';}
+                    std::string st;
+                    if(a.at(i+1)!=nullptr){st = "--";}
+                    else{st = "  ";}
+                    for(int j = 0; j < d; j++)
+                    {st = st + st;}
+                    os << st;
+                    if(a.at(i+1)!=nullptr){os << '|';}
+                    else {os << ' ';}
+                    for(int r = (i/2)%2; r <= d; r++)
+                    {
+                        std::string s = " ";
+                        for(int j = 0; j < r; j++)
+                        {
+                            s += s;
+                        }
+                        os << s;
+                    }
+                }
+                os << '\n';
+                for(unsigned long i = 0; i < a.size(); i+=2)
+                {
+                    if(a.at(i)!=nullptr){os << a.at(i)->value;}
+                    else {os << ' ';}
+                    std::string st = "  ";
+                    for(int j = 0; j < d; j++)
+                    {st = st + st;}
+                    os << st;
+                    if(a.at(i+1)!=nullptr){os << a.at(i+1)->value;}
+                    else {os << ' ';}
+                    for(int r = (i/2)%2; r <= d; r++)
+                    {
+                        std::string s = " ";
+                        for(int j = 0; j < r; j++)
+                        {
+                            s += s;
+                        }
+                        os << s;
+                    }
+                }
+                std::vector<Node*> new_a;
+                new_a.resize(2*a.size());
+                for(unsigned long i = 0; i < a.size(); i++)
+                {
+                    unsigned long left = 2*i;
+                    unsigned long right = 2*i + 1;
+                    if(a.at(i) == nullptr)
+                    {
+                        new_a.at(left) = nullptr;
+                        new_a.at(right) = nullptr;
+                    }
+                    else
+                    {
+                        new_a.at(left) = a.at(i)->left;
+                        new_a.at(right) = a.at(i)->right;
+                    }
+                }
+                assist(os,new_a,d-1);
                 return os;
             }
 
             friend std::ostream& operator<<(std::ostream& os, const BinaryTree tree)
             {
+                if(tree.head == nullptr){return os;}
+                int d = get_depth(tree.head);
+                if(tree.head->left == nullptr && tree.head->left == nullptr){return os;}
+                std::vector<Node*> a;
+                a.resize(2);
+                a.at(0) = tree.head->left;
+                a.at(1) = tree.head->right;
+                os << tree.head->value;
+                tree.assist(os, a, d-1);
                 return os;
             }
     };
