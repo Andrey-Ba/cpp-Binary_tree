@@ -362,14 +362,14 @@ namespace ariel{
                     if(a.at(i+1)!=nullptr){st = "--";}
                     else{st = "  ";}
                     for(int j = 0; j < d; j++)
-                    {st = st + st;}
+                    {st += st;}
                     os << st;
                     if(a.at(i+1)!=nullptr){os << '|';}
                     else {os << ' ';}
-                    for(int r = (i/2)%2; r <= d; r++)
+                    for(unsigned long r = (i/2)%2; r <= d; r++)
                     {
                         std::string s = " ";
-                        for(int j = 0; j < r; j++)
+                        for(unsigned long j = 0; j < r; j++)
                         {
                             s += s;
                         }
@@ -383,14 +383,14 @@ namespace ariel{
                     else {os << ' ';}
                     std::string st = "  ";
                     for(int j = 0; j < d; j++)
-                    {st = st + st;}
+                    {st += st;}
                     os << st;
                     if(a.at(i+1)!=nullptr){os << a.at(i+1)->value;}
                     else {os << ' ';}
-                    for(int r = (i/2)%2; r <= d; r++)
+                    for(unsigned long r = (i/2)%2; r <= d; r++)
                     {
                         std::string s = " ";
-                        for(int j = 0; j < r; j++)
+                        for(unsigned long j = 0; j < r; j++)
                         {
                             s += s;
                         }
